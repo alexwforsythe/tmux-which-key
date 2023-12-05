@@ -1,0 +1,3 @@
+# Ignore the plugin file so users can customize it. The default config is stored
+# at plugin/init.example.tmux for version control.
+/plugin/init.tmux

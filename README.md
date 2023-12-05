@@ -11,6 +11,7 @@ menu. Inspired by the likes of
 - An action menu with many of the common tmux commands
 - Mnemonic layout for easy memorization
 - Transient states (menus that stay open for repeated commands)
+- Runs in pure tmux script for speed
 
 ## Installation
 
@@ -55,19 +56,16 @@ Actions
 
 - [ ] Add action to swap windows
 - [ ] Add action to join panes
+- [ ] Add backspace keybinding to go to previous menu
 
 Customization
 
-- [ ] Allow customizing menus without changing the git working tree (this breaks
-      upgrades with TPM)
 - [ ] Allow customization via YAML config
-
-Performance
-
-- [ ] Reimplement in pure tmux script for speed
-- [ ] Bind menu keys to the tmux key-table until escape, or maybe we can use
-      `command-prompt -k -i` to repeat commands
+- [ ] Inject each menus name into the title
 
 ## Resources
 
+- `man tmux`
+- [Tmux Wiki](https://github.com/tmux/tmux/wiki)
 - [How to create Tmux plugins](https://github.com/tmux-plugins/tpm/blob/master/docs/how_to_create_plugin.md)
+- [The Tao of tmux](https://leanpub.com/the-tao-of-tmux/read)
