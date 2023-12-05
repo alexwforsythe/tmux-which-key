@@ -4,19 +4,19 @@
 # init.tmux: called by plugin.sh.tmux to initialize the plugin.
 #
 
-display -p '[tmux-action-menu] Loading plugin ...'
+display -p '[tmux-which-key] Loading plugin ...'
 
 #
 # User options
 #
 
-set -goq @tam_cfg_key_root_table "C-Space"
-set -goq @tam_cfg_key_prefix_table "Space"
-set -goq @tam_cfg_title_style "align=centre,bold"
-set -goq @tam_cfg_title_prefix "tmux"
-set -goq @tam_cfg_title_prefix_style "fg=green,align=centre,bold"
-set -goq @tam_cfg_pos_x "R"
-set -goq @tam_cfg_pos_y "P"
+# set -g @wk_cfg_key_root_table "C-Space"
+set -g @wk_cfg_key_prefix_table "Space"
+set -g @wk_cfg_title_style "align=centre,bold"
+set -g @wk_cfg_title_prefix "tmux"
+set -g @wk_cfg_title_prefix_style "fg=green,align=centre,bold"
+set -g @wk_cfg_pos_x "R"
+set -g @wk_cfg_pos_y "P"
 
 #
 # Custom variables
@@ -28,46 +28,45 @@ setenv -h log_info "#[fg=green,italics] [info]#[default]#[italics]"
 # Menus
 #
 
-set -g @tam_menu_copy \
+set -g @wk_menu_copy \
 'Copy "c" copy-mode \
 "List buffers" "#" list-buffers'
 
-set -g @tam_menu_layout \
-'Next "l" nextl \
+set -g @wk_menu_layout \
+'Next "l" "nextl ; show-wk-menu #{@wk_menu_layout}" \
 Tiled "t" "selectnl tiled" \
 Horizontal "h" "selectl even-horizontal" \
 Vertical "v" "selectl even-vertical" \
 "Horizontal main" "H" "selectl main-horizontal" \
 "Vertical main" "V" "selectl main-vertical"'
 
-set -g @tam_menu_windows \
+set -g @wk_menu_windows \
 'Last "tab" last-window \
 Choose "w" "choose-tree -Zw" \
 Previous "p" previous-window \
 Next "n" next-window \
 New "c" "neww -c #{pane_current_path}" \
 "" \
-"+Layout" "l" "show-action-menu #{@tam_menu_layout}" \
+"+Layout" "l" "show-wk-menu #{@wk_menu_layout}" \
 "Split horiztonal" "/" "splitw -h -c #{pane_current_path}" \
 "Split vertical" "-" "splitw -v -c #{pane_current_path}" \
-Rotate "o" rotatew \
-"Rotate reverse" "O" "rotatew -D" \
+Rotate "o" "rotatew ; show-wk-menu #{@wk_menu_windows}" \
+"Rotate reverse" "O" "rotatew -D ; show-wk-menu #{@wk_menu_windows}" \
 "" \
 Rename "R" "command-prompt -I \"#W\" \"renamew -- \\"%%\\"\"" \
 Kill "X" "confirm -p \"Kill window #W? (y/n)\" killw"'
 
-set -g @tam_menu_resize \
-'Zoom "z" "resizep -Z" \
-Left "h" "resizep -L 10" \
-Down "j" "resizep -D 10" \
-Up "k" "resizep -U 10" \
-Right "l" "resizep -R 10" \
-"Left less" "H" "resizep -L" \
-"Down less" "J" "resizep -D" \
-"Up less" "K" "resizep -U" \
-"Right less" "L" "resizep -R"'
+set -g @wk_menu_resize \
+'Left "h" "resizep -L ; show-wk-menu #{@wk_menu_resize}" \
+Down "j" "resizep -D ; show-wk-menu #{@wk_menu_resize}" \
+Up "k" "resizep -U ; show-wk-menu #{@wk_menu_resize}" \
+Right "l" "resizep -R ; show-wk-menu #{@wk_menu_resize}" \
+"Left more" "H" "resizep -L 10 ; show-wk-menu #{@wk_menu_resize}" \
+"Down more" "J" "resizep -D 10 ; show-wk-menu #{@wk_menu_resize}" \
+"Up more" "K" "resizep -U 10 ; show-wk-menu #{@wk_menu_resize}" \
+"Right more" "L" "resizep -R 10 ; show-wk-menu #{@wk_menu_resize}"'
 
-set -g @tam_menu_panes \
+set -g @wk_menu_panes \
 'Last "tab" lastp \
 Choose "p" "displayp -d 0" \
 "" \
@@ -77,7 +76,7 @@ Up "k" "selectp -U" \
 Right "l" "selectp -R" \
 "" \
 Zoom "z" "resizep -Z" \
-"+Resize" "r" "show-action-menu #{@tam_menu_resize}" \
+"+Resize" "r" "show-wk-menu #{@wk_menu_resize}" \
 "Swap left" "H" "swapp -t \"{left-of}\"" \
 "Swap down" "J" "swapp -t \"{down-of}\"" \
 "Swap up" "K" "swapp -t \"{up-of}\"" \
@@ -90,49 +89,46 @@ Capture "C" capture-pane \
 "Respawn pane" "R" restart-pane \
 Kill "X" "confirm -p \"Kill pane #P? (y/n)\" killp"'
 
-set -g @tam_menu_buffers \
+set -g @wk_menu_buffers \
 'Choose "b" "choose-buffer -Z" \
 List "l" lsb \
 Paste "p" pasteb'
 
-set -g @tam_menu_sessions \
+set -g @wk_menu_sessions \
 'Choose "s" "choose-tree -Zs" \
 New "N" new \
-Rename "r" rename \
-"Save session" "S" "run-shell $TMUX_PLUGIN_MANAGER_PATH/tmux-resurrect/scripts/save.sh" \
-"Restore session" "R" "run-shell $TMUX_PLUGIN_MANAGER_PATH/tmux-resurrect/scripts/restore.sh"'
+Rename "r" rename'
 
-set -g @tam_menu_plugins \
+set -g @wk_menu_plugins \
 'Install "i" "run-shell $TMUX_PLUGIN_MANAGER_PATH/tpm/bindings/install_plugins" \
 Update "u" "run-shell $TMUX_PLUGIN_MANAGER_PATH/tpm/bindings/update_plugins" \
 Clean "c" "run-shell $TMUX_PLUGIN_MANAGER_PATH/tpm/bindings/clean_plugins"'
 
-set -g @tam_menu_client \
+set -g @wk_menu_client \
 'Choose "c" "choose-client -Z" \
 Last "l" "switchc -l" \
 Previous "p" "switchc -p" \
 Next "n" "switchc -n" \
 "" \
 Refresh "R" refresh \
-"+Plugins" "P" "show-action-menu #{@tam_menu_plugins}" \
+"+Plugins" "P" "show-wk-menu #{@wk_menu_plugins}" \
 Detach "D" detach \
 Suspend "Z" suspendc \
 "" \
 "Reload config" "r" reload-config \
 Customize "," "customize-mode -Z"'
 
-set -g @tam_menu_root \
+set -g @wk_menu_root \
 'Run "space" command-prompt \
 "Last window" "tab" last-window \
 "Last pane" "`" last-pane \
-Thumbs "t" "run-shell $TMUX_PLUGIN_MANAGER_PATH/tmux-thumbs/tmux-thumbs.sh" \
-Copy "c" "show-action-menu #{@tam_menu_copy}" \
+Copy "c" "show-wk-menu #{@wk_menu_copy}" \
 "" \
-"+Windows" "w" "show-action-menu #{@tam_menu_windows}" \
-"+Panes" "p" "show-action-menu #{@tam_menu_panes}" \
-"+Buffers" "b" "show-action-menu #{@tam_menu_buffers}" \
-"+Sessions" "s" "show-action-menu #{@tam_menu_sessions}" \
-"+Client" "C" "show-action-menu #{@tam_menu_client}" \
+"+Windows" "w" "show-wk-menu #{@wk_menu_windows}" \
+"+Panes" "p" "show-wk-menu #{@wk_menu_panes}" \
+"+Buffers" "b" "show-wk-menu #{@wk_menu_buffers}" \
+"+Sessions" "s" "show-wk-menu #{@wk_menu_sessions}" \
+"+Client" "C" "show-wk-menu #{@wk_menu_client}" \
 "" \
 Time "T" clock-mode \
 "Show messages" "\~" show-messages \
@@ -142,17 +138,17 @@ Time "T" clock-mode \
 # Macros
 #
 
-set -gF @tam_cmd_show \
+set -gF @wk_cmd_show \
 "display-menu \
--x '#{@tam_cfg_pos_x}' \
--y '#{@tam_cfg_pos_y}' \
--T '#[#{@tam_cfg_title_style}]#[#{@tam_cfg_title_prefix_style}]#{@tam_cfg_title_prefix}#[#{@tam_cfg_title_style}]'"
+-x '#{@wk_cfg_pos_x}' \
+-y '#{@wk_cfg_pos_y}' \
+-T '#[#{@wk_cfg_title_style}]#[#{@wk_cfg_title_prefix_style}]#{@wk_cfg_title_prefix}#[#{@wk_cfg_title_style}]'"
 
-set -gF command-alias[200] show-action-menu=\
-'#{@tam_cmd_show}'
+set -gF command-alias[200] show-wk-menu=\
+'#{@wk_cmd_show}'
 
-set -gF command-alias[201] show-action-menu-root=\
-'#{@tam_cmd_show} #{@tam_menu_root}'
+set -gF command-alias[201] show-wk-menu-root=\
+'#{@wk_cmd_show} #{@wk_menu_root}'
 
 set -gF command-alias[202] reload-config=\
 'display "#{log_info} Loading config... " ; \
@@ -167,10 +163,10 @@ respawnp -k -c #{pane_current_path}'
 # Keybindings
 #
 
-display -p "[tmux-action-menu] Binding root table key to #{@tam_cfg_key_root_table} ..."
-run-shell "tmux bind-key -Troot #{@tam_cfg_key_root_table} show-action-menu-root"
+# display -p "[tmux-which-key] Binding root table key to #{@wk_cfg_key_root_table} ..."
+# run-shell "tmux bind-key -Troot #{@wk_cfg_key_root_table} show-wk-menu-root"
 
-display -p "[tmux-action-menu] Binding prefix table key to #{@tam_cfg_key_prefix_table} ..."
-run-shell "tmux bind-key -Tprefix #{@tam_cfg_key_prefix_table} show-action-menu-root"
+display -p "[tmux-which-key] Binding prefix table key to #{@wk_cfg_key_prefix_table} ..."
+run-shell "tmux bind-key -Tprefix #{@wk_cfg_key_prefix_table} show-wk-menu-root"
 
-display -p '[tmux-action-menu] Done'
+display -p '[tmux-which-key] Done'
