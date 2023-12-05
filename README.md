@@ -8,6 +8,25 @@ menu. Inspired by the likes of
 make users more effective at using tmux by reducing keyboard shortcut
 memorization and increasing feature discoverability.
 
+![Demo](https://vhs.charm.sh/vhs-7cpM1K8aaWiy7CTJ8Odide.gif)
+
+<!-- markdownlint-disable MD033 -->
+<details>
+<summary>Key presses</summary>
+
+| Key | Action           |
+| --- | ---------------- |
+| w   | Windows menu     |
+| /   | Split horizontal |
+
+| Key | Action     |
+| --- | ---------- |
+| p   | Panes menu |
+| h   | Left pane  |
+
+</details>
+<!-- markdownlint-enable MD033 -->
+
 ## ✨ Features
 
 - An action menu with many of the common tmux commands
@@ -16,6 +35,108 @@ memorization and increasing feature discoverability.
 - Support for user macros (multiple commands in one action)
 - Transient states (menus that stay open for repeated commands)
 - Runs in pure tmux script for speed
+
+### Demo
+
+Here are a few examples of the plugin in action:
+
+<!-- markdownlint-disable MD033 -->
+<details>
+<summary>Navigation</summary>
+
+![Navigation](https://vhs.charm.sh/vhs-5COoRwS1Qd83LpJkVGgRUq.gif)
+
+<blockquote>
+<details>
+<summary>Key presses</summary>
+
+| Key | Action           |
+| --- | ---------------- |
+| w   | Windows menu     |
+| /   | Split horizontal |
+
+| Key | Action        |
+| --- | ------------- |
+| w   | Windows menu  |
+| c   | Create window |
+
+| Key | Action          |
+| --- | --------------- |
+| w   | Windows menu    |
+| p   | Previous window |
+
+| Key | Action        |
+| --- | ------------- |
+| w   | Windows menu  |
+| w   | Select window |
+| 2   | Window 2      |
+
+</details>
+</blockquote>
+
+</details>
+
+<details>
+<summary>Changing layouts</summary>
+
+![Layouts](https://vhs.charm.sh/vhs-5AcYRFnaoxilrEOxZPNYGn.gif)
+
+<blockquote>
+<details>
+<summary>Key presses</summary>
+
+| Key | Action           |
+| --- | ---------------- |
+| w   | Windows menu     |
+| /   | Split horizontal |
+
+| Key | Action         |
+| --- | -------------- |
+| w   | Windows menu   |
+| -   | Split vertical |
+
+| Key         | Action       |
+| ----------- | ------------ |
+| w           | Windows menu |
+| l           | Layouts menu |
+| l (6 times) | Next layout  |
+
+| Key | Action      |
+| --- | ----------- |
+| p   | Panes menu  |
+| p   | Select pane |
+| 0   | Pane 0      |
+
+</details>
+</blockquote>
+
+</details>
+
+<details>
+<summary>User macros</summary>
+
+![Macros](https://vhs.charm.sh/vhs-22Bo8WL6Dyntg6grCXJ5R8.gif)
+
+<blockquote>
+<details>
+<summary>Key presses</summary>
+
+| Key | Action         |
+| --- | -------------- |
+| C   | Client menu    |
+| P   | Plugins menu   |
+| u   | Update plugins |
+
+| Key | Action      |
+| --- | ----------- |
+| C   | Client menu |
+| r   | Reload      |
+
+</details>
+</blockquote>
+
+</details>
+<!-- markdownlint-enable MD033 -->
 
 ## 📦 Installation
 
