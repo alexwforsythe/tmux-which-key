@@ -4,9 +4,11 @@ A plugin for tmux that allows users to select actions from a customizable popup
 menu. Inspired by the likes of
 [vscode-which-key](https://github.com/VSpaceCode/vscode-which-key),
 [emacs-which-key](https://github.com/justbur/emacs-which-key), and
-[which-key.nvim](https://github.com/folke/which-key.nvim).
+[which-key.nvim](https://github.com/folke/which-key.nvim), this plugin aims to
+make users more effective at using tmux by reducing keyboard shortcut
+memorization and increasing feature discoverability.
 
-## Features
+## ✨ Features
 
 - An action menu with many of the common tmux commands
 - Mnemonic layout for easy memorization
@@ -15,7 +17,7 @@ menu. Inspired by the likes of
 - Transient states (menus that stay open for repeated commands)
 - Runs in pure tmux script for speed
 
-## Installation
+## 📦 Installation
 
 ### Requirements
 
@@ -53,14 +55,14 @@ run-shell $PATH_TO_PLUGIN/plugin.sh.tmux
 tmux source-file $HOME/.tmux.conf
 ```
 
-## Customization
+## ⚙️ Configuration
 
 Menus can be customized by either:
 
 1. Editing `config.yaml` (requires python3), or
 2. Editing `plugin/init.tmux` directly
 
-### YAML configuration
+### YAML
 
 This method requires python3 to be installed on your system. Most Unix systems
 ship with it installed by default these days, so it shouldn't be a problem for
@@ -137,15 +139,15 @@ tmux script can be error-prone and difficult to debug.
 
 You can customize the action menu by editing `plugin/init.tmux` directly.
 
-## Common issues
+## ❓ Known issues
 
-### My menu or submenu isn't appearing
+### Menu or submenu doesn't appear
 
 Menus will silently fail to open if the number of items causes them to exceed
 the height of the terminal. If you run into this issue frequently, consider
 breaking you menu into multiple submenus.
 
-### The plugin is overriding my custom aliases
+### Plugin overrides custom aliases
 
 tmux-which-key uses tmux `command-alias` to execute certain actions, such as
 macros, quickly. `command-alias` is a global option, though, so these actions
@@ -155,17 +157,12 @@ This plugin's aliases start at index 200 by default, but if there are already
 aliases mapped in this range, you can change the default starting index in
 `config.yaml`.
 
-## TODO
+## Related Projects
 
-Actions
-
-- [ ] Add action to swap windows
-- [ ] Add action to join panes
-- [ ] Add backspace keybinding to go to previous menu
-
-Customization
-
-- [ ] Inject each menus name into the title
+- [tmux-modal](https://github.com/whame/tmux-modal)
+- [tmux-menus](https://github.com/jaclu/tmux-menus)
+- [tmux-easy-menu](https://github.com/ja-sonyun/tmux-easy-menu)
+- [tmux-pain-control](https://github.com/tmux-plugins/tmux-pain-control)
 
 ## Resources
 
