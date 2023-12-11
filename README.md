@@ -253,12 +253,31 @@ set -g @tmux-which-key-disable-autobuild=1
 set -g @plugin 'alexwforsythe/tmux-which-key'
 ```
 
-### Manual configuration
+### Manual
+
+You can customize the action menu by editing `plugin/init.tmux` directly.
 
 I strongly recommend using YAML to customize your action menu because editing
 tmux script can be error-prone and difficult to debug.
 
-You can customize the action menu by editing `plugin/init.tmux` directly.
+### Zsh
+
+You can open tmux-which-key from the command line by running its tmux alias:
+
+```sh
+tmux show-wk-menu-root
+```
+
+You can trigger the menu with <kbd>Space</kbd> from vicmd mode--similarly to
+[Spacemacs](https://github.com/syl20bnr/spacemacs) or
+[VSpaceCode](https://github.com/VSpaceCode/VSpaceCode)--by adding a ZLE widget
+and keybinding to your `~/.zshrc`:
+
+```sh
+tmux-which-key() { tmux show-wk-menu-root ; }
+zle -N tmux-which-key
+bindkey -M vicmd " " tmux-which-key
+```
 
 ## ❓ Known issues
 
