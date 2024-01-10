@@ -14,6 +14,19 @@ config_file="$root_dir/config.yaml"
 plugin_dir="$root_dir/plugin"
 init_file="$plugin_dir/init.tmux"
 
+# XDG
+case "$(tmux show-option -gvq @tmux-which-key-enable-xdg-dirs)" in
+    1 | true)
+        root_dir="$(dirname "$(readlink -f "$0")")"
+        plugin_dir="$root_dir/plugin"
+        # do not create XDG dirs if they don't exist
+        (cd "$XDG_CONFIG_HOME" && mkdir -p tmux/plugins/tmux-which-key)
+        (cd "$XDG_DATA_HOME" && mkdir -p tmux/plugins/tmux-which-key)
+        config_file="$XDG_CONFIG_HOME/tmux/plugins/tmux-which-key/config.yaml"
+        init_file="$XDG_DATA_HOME/tmux/plugins/tmux-which-key/init.tmux"
+        ;;
+esac
+
 # Copy the default configs to the root directory if they don't exist yet. The
 # root files are gitignored so users can customize them without breaking git
 # updates.
@@ -26,15 +39,15 @@ fi
 
 # If enabled, rebuild the menu from the user config.
 case "$(tmux show-option -gvq @tmux-which-key-disable-autobuild)" in
-1 | true) ;;
-*)
-    echo "[tmux-which-key] Rebuilding menu ..."
-    if command -v python3 >/dev/null; then
-        "$plugin_dir/build.py" "$config_file" "$init_file"
-    else
-        echo "[tmux-which-key] python3 not found"
-    fi
-    ;;
+    1 | true) ;;
+    *)
+        echo "[tmux-which-key] Rebuilding menu ..."
+        if command -v python3 >/dev/null; then
+            "$plugin_dir/build.py" "$config_file" "$init_file"
+        else
+            echo "[tmux-which-key] python3 not found"
+        fi
+        ;;
 esac
 
 # Load the plugin.
