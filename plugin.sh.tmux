@@ -19,11 +19,11 @@ case "$(tmux show-option -gvq @tmux-which-key-enable-xdg-dirs)" in
     1 | true)
         root_dir="$(dirname "$(readlink -f "$0")")"
         plugin_dir="$root_dir/plugin"
-        # do not create XDG dirs if they don't exist
-        (cd "$XDG_CONFIG_HOME" && mkdir -p tmux/plugins/tmux-which-key)
-        (cd "$XDG_DATA_HOME" && mkdir -p tmux/plugins/tmux-which-key)
-        config_file="$XDG_CONFIG_HOME/tmux/plugins/tmux-which-key/config.yaml"
-        init_file="$XDG_DATA_HOME/tmux/plugins/tmux-which-key/init.tmux"
+        # do not create base XDG dirs if they don't exist
+        (cd "$XDG_CONFIG_HOME" && mkdir -p tmux-plugins/tmux-which-key)
+        (cd "$XDG_DATA_HOME" && mkdir -p tmux-plugins/tmux-which-key)
+        config_file="$XDG_CONFIG_HOME/tmux-plugins/tmux-which-key/config.yaml"
+        init_file="$XDG_DATA_HOME/tmux-plugins/tmux-which-key/init.tmux"
         ;;
 esac
 
