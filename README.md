@@ -253,6 +253,64 @@ set -g @tmux-which-key-disable-autobuild=1
 set -g @plugin 'alexwforsythe/tmux-which-key'
 ```
 
+##### @tmux-which-key-enable-xdg-dirs
+
+Moves the configuration file to
+`$XDG_CONFIG_HOME/tmux-plugins/tmux-which-key/config.yaml`
+and the init file to
+`$XDG_DATA_HOME/tmux-plugins/tmux-which-key/init.tmux`.
+Allows the plugin to be used with immutable or declarative operating systems.
+
+```tmux
+set -g @tmux-which-key-enable-xdg-dirs=1
+# ...
+set -g @plugin 'alexwforsythe/tmux-which-key'
+```
+
+<!-- markdownlint-disable MD033 -->
+<details>
+<summary>Example Home Manager Nix Config</summary>
+
+```nix
+{
+  lib,
+  pkgs,
+  ...
+}: let
+  tmux-which-key =
+    pkgs.tmuxPlugins.mkTmuxPlugin
+    {
+      pluginName = "tmux-which-key";
+      version = "<short commit hash>";
+      src = pkgs.fetchFromGitHub {
+        owner = "alexwforsythe";
+        repo = "tmux-which-key";
+        rev = "<commit hash>";
+        sha256 = lib.fakeSha256;
+      };
+      rtpFilePath = "plugin.sh.tmux";
+    };
+in {
+  xdg.configFile = {
+    "tmux-plugins/tmux-which-key/config.yaml".text = lib.generators.toYAML {} {
+      command_alias_start_index = 200;
+      # rest of config here
+    };
+  };
+  programs.tmux.plugins = [
+    {
+      plugin = tmux-which-key;
+      extraConfig = ''
+        set -g @tmux-which-key-enable-xdg-dirs 1;
+      '';
+    }
+  ];
+}
+```
+
+</details>
+<!-- markdownlint-enable MD033 -->
+
 ### Manual
 
 You can customize the action menu by editing `plugin/init.tmux` directly.
