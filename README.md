@@ -255,11 +255,21 @@ set -g @plugin 'alexwforsythe/tmux-which-key'
 
 ##### @tmux-which-key-enable-xdg-dirs
 
-Moves the configuration file to
-`$XDG_CONFIG_HOME/tmux-plugins/tmux-which-key/config.yaml`
+Enables the use of XDG directories for the configuration and init files.
+
+With this option enabled, the following option also becomes available:
+
+```tmux
+# relative path from $XDG_*_HOME for files
+set -g @tmux-which-key-xdg-plugin-path=tmux/plugins/tmux-which-key # default
+```
+
+Enabling moves the configuration file to
+`$XDG_CONFIG_HOME/<@tmux-which-key-xdg-plugin-path>/config.yaml`
 and the init file to
-`$XDG_DATA_HOME/tmux-plugins/tmux-which-key/init.tmux`.
-Allows the plugin to be used with immutable or declarative operating systems.
+`$XDG_DATA_HOME/<@tmux-which-key-xdg-plugin-path>/init.tmux`.
+The allows the plugin to also be used with immutable or declarative operating
+systems.
 
 ```tmux
 set -g @tmux-which-key-enable-xdg-dirs=1
@@ -281,7 +291,7 @@ set -g @plugin 'alexwforsythe/tmux-which-key'
     pkgs.tmuxPlugins.mkTmuxPlugin
     {
       pluginName = "tmux-which-key";
-      version = "<short commit hash>";
+      version = "2024-01-10";
       src = pkgs.fetchFromGitHub {
         owner = "alexwforsythe";
         repo = "tmux-which-key";
@@ -292,7 +302,7 @@ set -g @plugin 'alexwforsythe/tmux-which-key'
     };
 in {
   xdg.configFile = {
-    "tmux-plugins/tmux-which-key/config.yaml".text = lib.generators.toYAML {} {
+    "tmux/plugins/tmux-which-key/config.yaml".text = lib.generators.toYAML {} {
       command_alias_start_index = 200;
       # rest of config here
     };

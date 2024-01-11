@@ -17,11 +17,28 @@ init_file="$plugin_dir/init.tmux"
 # XDG
 case "$(tmux show-option -gvq @tmux-which-key-enable-xdg-dirs)" in
     1 | true)
-        # do not create base XDG dirs if they don't exist
-        (cd "$XDG_CONFIG_HOME" && mkdir -p tmux-plugins/tmux-which-key)
-        (cd "$XDG_DATA_HOME" && mkdir -p tmux-plugins/tmux-which-key)
-        config_file="$XDG_CONFIG_HOME/tmux-plugins/tmux-which-key/config.yaml"
-        init_file="$XDG_DATA_HOME/tmux-plugins/tmux-which-key/init.tmux"
+        if [ -z "$XDG_CONFIG_HOME" ]; then
+            echo "[tmux-which-key] XDG_CONFIG_HOME is not set"
+            exit 1
+        fi
+        if [ ! -d "$XDG_CONFIG_HOME" ]; then
+            echo "[tmux-which-key] XDG_CONFIG_HOME: $XDG_CONFIG_HOME does not exist"
+            exit 1
+        fi
+        if [ -z "$XDG_DATA_HOME" ]; then
+            echo "[tmux-which-key] XDG_DATA_HOME is not set"
+            exit 1
+        fi
+        if [ ! -d "$XDG_DATA_HOME" ]; then
+            echo "[tmux-which-key] XDG_CONFIG_HOME: $XDG_DATA_HOME does not exist"
+            exit 1
+        fi
+        xdg_plugin_path=$(tmux show-option -gvq @tmux-which-key-xdg-plugin-path)
+        xdg_plugin_path=${xdg_plugin_path:-tmux/plugins/tmux-which-key}
+        mkdir -p "$XDG_CONFIG_HOME/$xdg_plugin_path"
+        mkdir -p "$XDG_DATA_HOME/$xdg_plugin_path"
+        config_file="$XDG_CONFIG_HOME/$xdg_plugin_path/config.yaml"
+        init_file="$XDG_DATA_HOME/$xdg_plugin_path/init.tmux"
         ;;
 esac
 
