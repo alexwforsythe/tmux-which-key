@@ -253,7 +253,7 @@ set -g @tmux-which-key-disable-autobuild=1
 set -g @plugin 'alexwforsythe/tmux-which-key'
 ```
 
-##### @tmux-which-key-enable-xdg-dirs
+##### @tmux-which-key-xdg-enable
 
 Enables the use of XDG directories for the configuration and init files.
 
@@ -272,7 +272,7 @@ The allows the plugin to also be used with immutable or declarative operating
 systems.
 
 ```tmux
-set -g @tmux-which-key-enable-xdg-dirs=1
+set -g @tmux-which-key-xdg-enable=1
 # ...
 set -g @plugin 'alexwforsythe/tmux-which-key'
 ```
@@ -311,7 +311,7 @@ in {
     {
       plugin = tmux-which-key;
       extraConfig = ''
-        set -g @tmux-which-key-enable-xdg-dirs 1;
+        set -g @tmux-which-key-xdg-enable 1;
       '';
     }
   ];

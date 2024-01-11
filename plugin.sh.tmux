@@ -15,7 +15,7 @@ plugin_dir="$root_dir/plugin"
 init_file="$plugin_dir/init.tmux"
 
 # XDG
-case "$(tmux show-option -gvq @tmux-which-key-enable-xdg-dirs)" in
+case "$(tmux show-option -gvq @tmux-which-key-xdg-enable)" in
     1 | true)
         if [ -z "$XDG_CONFIG_HOME" ]; then
             echo "[tmux-which-key] XDG_CONFIG_HOME is not set"
