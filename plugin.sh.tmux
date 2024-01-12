@@ -71,8 +71,8 @@ case "$(tmux show-option -gvq @tmux-which-key-xdg-enable)" in
         make_xdg_path "$HOME/$xdg_data_path"
 
         # use the XDG paths
-        config_file="$xdg_config_path/config.yaml"
-        init_file="$xdg_data_path/init.tmux"
+        config_file="$HOME/$xdg_config_path/config.yaml"
+        init_file="$HOME/$xdg_data_path/init.tmux"
         ;;
 esac
 
