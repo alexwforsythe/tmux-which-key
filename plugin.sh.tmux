@@ -38,7 +38,7 @@ make_xdg_path() {
 case "$(tmux show-option -gvq @tmux-which-key-xdg-enable)" in
     1 | true)
         if [ -z "$HOME" ]; then
-            echo "[tmux-which-key] HOME is not set.  XDG support is limited to users only".
+            echo "[tmux-which-key] HOME is not set.  XDG support is limited to users only."
             exit 1
         fi
 
