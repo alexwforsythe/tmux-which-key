@@ -255,27 +255,27 @@ set -g @plugin 'alexwforsythe/tmux-which-key'
 
 ##### @tmux-which-key-xdg-enable
 
-Enables the use of XDG directories for the configuration and init files.
+Changes the location of configuration and init files to use XDG directories.
+By default, these paths are used instead of this plugin's installation
+directory:
 
-With this option enabled, the following option also becomes available:
+- `$XDG_CONFIG_HOME/tmux/plugins/tmux-which-key/config.yaml`
+- `$XDG_DATA_HOME/tmux/plugins/tmux-which-key/init.tmux`.
 
-```tmux
-# relative path from $XDG_*_HOME for files
-set -g @tmux-which-key-xdg-plugin-path=tmux/plugins/tmux-which-key # default
-```
-
-Enabling moves the configuration file to
-`$XDG_CONFIG_HOME/<@tmux-which-key-xdg-plugin-path>/config.yaml`
-and the init file to
-`$XDG_DATA_HOME/<@tmux-which-key-xdg-plugin-path>/init.tmux`.
-The allows the plugin to also be used with immutable or declarative operating
-systems.
+The relative path from `XDG_*_HOME` can be changed using the
+`@tmux-which-key-xdg-plugin-path` option for additional customization.
 
 ```tmux
 set -g @tmux-which-key-xdg-enable=1
+set -g @tmux-which-key-xdg-plugin-path=tmux/plugins/tmux-which-key # default
+
 # ...
+
 set -g @plugin 'alexwforsythe/tmux-which-key'
 ```
+
+This allows the plugin to also be used with immutable or declarative operating
+systems.
 
 <!-- markdownlint-disable MD033 -->
 <details>
