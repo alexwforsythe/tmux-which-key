@@ -56,6 +56,7 @@ case "$(tmux show-option -gvq @tmux-which-key-xdg-enable)" in
         case "$xdg_config_path" in
             ../*)
                 echo "[tmux-which-key] XDG_CONFIG_HOME plugin path is outside of HOME: $HOME/$xdg_config_path"
+                exit 1
                 ;;
         esac
         make_xdg_path "$HOME/$xdg_config_path"
@@ -66,6 +67,7 @@ case "$(tmux show-option -gvq @tmux-which-key-xdg-enable)" in
         case "$xdg_data_path" in
             ../*)
                 echo "[tmux-which-key] XDG_DATA_HOME plugin path is outside of HOME: $HOME/$xdg_data_path"
+                exit 1
                 ;;
         esac
         make_xdg_path "$HOME/$xdg_data_path"
