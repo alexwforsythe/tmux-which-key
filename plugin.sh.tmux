@@ -15,32 +15,68 @@ plugin_dir="$root_dir/plugin"
 init_file="$plugin_dir/init.tmux"
 
 # XDG
+
+# create an XDG path and set the spec's default permissions of 0700 to newly
+# created directories only
+make_xdg_path() {
+    OLDIFS=$IFS
+    IFS='/'
+    current_dir=""
+    # walk the path to create each directory if it doesn't exist
+    for dir in $1; do
+        current_dir="$current_dir/$dir"
+        # only create the directory and apply the mode it doesn't exist
+        if [ ! -d "$current_dir/$dir" ]; then
+            # shellcheck disable=SC2174
+            # applying the mode to the deepest directory is intentional
+            mkdir -m 0700 -p "$current_dir"
+        fi
+    done
+    IFS=$OLDIFS
+}
+
 case "$(tmux show-option -gvq @tmux-which-key-xdg-enable)" in
     1 | true)
-        if [ -z "$XDG_CONFIG_HOME" ]; then
-            echo "[tmux-which-key] XDG_CONFIG_HOME is not set"
+        if [ -z "$HOME" ]; then
+            echo "[tmux-which-key] HOME is not set.  XDG support is limited to users only".
             exit 1
         fi
-        if [ ! -d "$XDG_CONFIG_HOME" ]; then
-            echo "[tmux-which-key] XDG_CONFIG_HOME: $XDG_CONFIG_HOME does not exist"
-            exit 1
-        fi
-        if [ -z "$XDG_DATA_HOME" ]; then
-            echo "[tmux-which-key] XDG_DATA_HOME is not set"
-            exit 1
-        fi
-        if [ ! -d "$XDG_DATA_HOME" ]; then
-            echo "[tmux-which-key] XDG_CONFIG_HOME: $XDG_DATA_HOME does not exist"
-            exit 1
-        fi
+
+        # use XDG spec's default directories if not set
+        XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
+        XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
+
+        # get relative XDG path for the plugin or use the default
         xdg_plugin_path=$(tmux show-option -gvq @tmux-which-key-xdg-plugin-path)
         xdg_plugin_path=${xdg_plugin_path:-tmux/plugins/tmux-which-key}
-        mkdir -p "$XDG_CONFIG_HOME/$xdg_plugin_path"
-        mkdir -p "$XDG_DATA_HOME/$xdg_plugin_path"
-        config_file="$XDG_CONFIG_HOME/$xdg_plugin_path/config.yaml"
-        init_file="$XDG_DATA_HOME/$xdg_plugin_path/init.tmux"
+
+        # create the config path if it doesn't exist, ensure it is inside
+        # $HOME, and simplify the path
+        xdg_config_path="$(realpath --relative-to="$HOME" "$XDG_CONFIG_HOME")/$xdg_plugin_path"
+        case "$xdg_config_path" in
+            ../*)
+                echo "XDG_CONFIG_HOME plugin path is outside of HOME: $HOME/$xdg_config_path"
+                ;;
+        esac
+        make_xdg_path "$HOME/$xdg_config_path"
+
+        # create the data path if it doesn't exist, ensure it is inside
+        # $HOME, and simplify the path
+        xdg_data_path="$(realpath --relative-to="$HOME" "$XDG_DATA_HOME")/$xdg_plugin_path"
+        case "$xdg_data_path" in
+            ../*)
+                echo "XDG_DATA_HOME plugin path is outside of HOME: $HOME/$xdg_data_path"
+                ;;
+        esac
+        make_xdg_path "$HOME/$xdg_data_path"
+
+        # use the XDG paths
+        config_file="$xdg_config_path/config.yaml"
+        init_file="$xdg_data_path/init.tmux"
         ;;
 esac
+
+# /XDG
 
 # Copy the default configs to the root directory if they don't exist yet. The
 # root files are gitignored so users can customize them without breaking git
