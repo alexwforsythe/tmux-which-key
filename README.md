@@ -31,7 +31,7 @@ memorization and increasing feature discoverability.
 
 - An action menu with many of the common tmux commands
 - Mnemonic layout for easy memorization
-- Easily customizable extensible via YAML configuration
+- Easily customizable and extensible via YAML configuration
 - Support for user macros (multiple commands in one action)
 - Transient states (menus that stay open for repeated commands)
 - Runs in pure tmux script for speed
@@ -140,7 +140,7 @@ Here are a few examples of the plugin in action:
 
 ## 📦 Installation
 
-### Requirements
+Requirements:
 
 - tmux>=3.0
 - python>=3.8 (optional)
@@ -153,10 +153,14 @@ Add the plugin to the list of TPM plugins in your `~/.tmux.conf`:
 set -g @plugin 'alexwforsythe/tmux-which-key'
 ```
 
-Hit <kbd>prefix</kbd> + <kbd>I</kbd> to install and load the plugin. You'll be
-presented with a wizard to complete the installation.
+Hit `prefix` + <kbd>I</kbd> to install and load the plugin. You'll be presented
+with a wizard to complete the installation.
 
-### Manual
+### Manual installation
+
+<!-- markdownlint-disable MD033 -->
+<details>
+<summary>Installation steps</summary>
 
 1. Clone this repository flag using the `--recursive` flag:
 
@@ -176,22 +180,35 @@ run-shell $PATH_TO_PLUGIN/plugin.sh.tmux
 tmux source-file $HOME/.tmux.conf
 ```
 
+</details>
+<!-- markdownlint-enable MD033 -->
+
+## 🎬️ Quickstart
+
+Once you've installed the plugin and reloaded your tmux config, you can open the
+action using:
+
+- The default root keybinding <kbd>ctrl</kbd> + <kbd>space</kbd>, or
+- The default prefix keybinding `prefix` + <kbd>space</kbd>
+
 ## ⚙️ Configuration
 
-Menus can be customized by either:
+Menus can be customized either by:
 
 1. Editing `config.yaml` (requires python3), or
 2. Editing `plugin/init.tmux` directly
 
-### YAML
+### YAML config
 
-This method requires python3 to be installed on your system. Most Unix systems
-ship with it installed by default these days, so it shouldn't be a problem for
-most users. If you don't have python3 installed and aren't willing to use it,
-you'll need to edit `plugin/init.tmux` directly.
+> [!NOTE]
+>
+> This method requires python3 to be installed on your system. Most Unix systems
+> ship with it installed by default these days, so it shouldn't be a problem for
+> most users. If you don't have python3 installed and aren't willing to use it,
+> you'll need to edit `plugin/init.tmux` directly.
 
-You can find the default configuration in `config.example.yaml`. The config file
-follows this structure:
+The default configuration is defined in `config.example.yaml`. Here's the
+structure:
 
 ```yaml
 # The starting index to use for the command-alias option, used for macros
@@ -242,10 +259,10 @@ items:
 
 ##### @tmux-which-key-disable-autobuild
 
-By default, the menu is rebuilt from `config.yaml` each time the plugin is
-initialized by TPM. If you aren't using the YAML configuration or want to reduce
-the plugin's impact on tmux startup time, you can disable this behavior by
-adding this to your `~/.tmux.conf` **before** loading the plugin:
+By default, the menu is rebuilt from `config.yaml` each time TPM initializes the
+plugin. If you aren't using the YAML configuration or want to reduce the
+plugin's impact on tmux startup time, you can disable this behavior by adding
+this to your `~/.tmux.conf` **before** loading the plugin:
 
 ```tmux
 set -g @tmux-which-key-disable-autobuild=1
@@ -255,8 +272,8 @@ set -g @plugin 'alexwforsythe/tmux-which-key'
 
 ##### @tmux-which-key-xdg-enable
 
-Changes the location of configuration and init files to use XDG directories.
-By default, these paths are used instead of this plugin's installation
+Changes the location of configuration and init files to use XDG directories. By
+default, these paths will be used instead of this plugin's installation
 directory:
 
 - `$XDG_CONFIG_HOME/tmux/plugins/tmux-which-key/config.yaml`
@@ -321,12 +338,16 @@ in {
 </details>
 <!-- markdownlint-enable MD033 -->
 
-### Manual
+<!-- markdownlint-disable MD024 -->
+
+### Manual config
 
 You can customize the action menu by editing `plugin/init.tmux` directly.
 
-I strongly recommend using YAML to customize your action menu because editing
-tmux script can be error-prone and difficult to debug.
+> [!TIP]
+>
+> I strongly recommend using YAML to customize your action menu because editing
+> tmux script can be error-prone and difficult to debug.
 
 ### Zsh
 
@@ -353,7 +374,7 @@ bindkey -M vicmd " " tmux-which-key
 
 Menus will silently fail to open if the number of items causes them to exceed
 the height of the terminal. If you run into this issue frequently, consider
-breaking you menu into multiple submenus.
+breaking your menu into multiple submenus.
 
 ### Plugin overrides custom aliases
 
@@ -365,7 +386,7 @@ This plugin's aliases start at index 200 by default, but if there are already
 aliases mapped in this range, you can change the default starting index in
 `config.yaml`.
 
-## Related Projects
+## Similar projects
 
 - [tmux-modal](https://github.com/whame/tmux-modal)
 - [tmux-menus](https://github.com/jaclu/tmux-menus)
