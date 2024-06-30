@@ -153,34 +153,195 @@ Add the plugin to the list of TPM plugins in your `~/.tmux.conf`:
 set -g @plugin 'alexwforsythe/tmux-which-key'
 ```
 
+<!-- markdownlint-disable MD033 -->
+
 Hit `prefix` + <kbd>I</kbd> to install and load the plugin. You'll be presented
 with a wizard to complete the installation.
+
+<!-- markdownlint-enable MD033 -->
 
 ### Manual installation
 
 <!-- markdownlint-disable MD033 -->
+
 <details>
 <summary>Installation steps</summary>
 
 1. Clone this repository flag using the `--recursive` flag:
 
-```sh
-git clone --recursive https://github.com/alexwforsythe/tmux-which-key $HOME/.tmux/plugins/
-```
+   ```sh
+   git clone --recursive https://github.com/alexwforsythe/tmux-which-key $HOME/.tmux/plugins/
+   ```
 
 2. Register the plugin in your `~/.tmux.conf`:
 
-```tmux
-run-shell $PATH_TO_PLUGIN/plugin.sh.tmux
-```
+   ```tmux
+   run-shell $PATH_TO_PLUGIN/plugin.sh.tmux
+   ```
 
 3. Reload your tmux config to load the plugin:
 
-```sh
-tmux source-file $HOME/.tmux.conf
-```
+   ```sh
+   tmux source-file $HOME/.tmux.conf
+   ```
 
 </details>
+
+<!-- markdownlint-enable MD033 -->
+
+### Nix / Home Manager Flake Installation
+
+<!-- markdownlint-disable MD033 -->
+
+<details>
+<summary>Installation steps</summary>
+
+1. Add this repository as an input and apply its overlay to add the package as
+   `tmuxPlugins.tmux-which-key` with the other tmux plugins in `nixpkgs`:
+
+   ```nix
+   # flake.nix
+   ...
+
+   inputs = {
+     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+     home-manager.url = "github:nix-community/home-manager";
+     tmux-which-key = {
+       url = "github:alexwforsythe/tmux-which-key";
+       inputs.nixpkgs.follows = "nixpkgs";
+     };
+     ...
+   };
+
+   outputs = {
+     self,
+     nixpkgs,
+     home-manager,
+     tmux-which-key,
+     ...
+   } @ inputs: let
+     lib = nixpkgs.lib // home-manager.lib;
+     systems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
+     forAllSystems = f: lib.genAttrs systems (system: f pkgsFor.${system});
+     pkgsFor = lib.genAttrs systems (system:
+       import nixpkgs {
+         inherit system;
+         overlays = [tmux-which-key.overlays.default];
+       });
+   in {
+     nixosConfigurations = {
+       "<configuration name>" = lib.nixosSystem {
+         modules = [...];
+         specialArgs = {inherit inputs outputs;};
+         pkgs = pkgsFor.x86_64-linux;
+       };
+     };
+
+     homeConfigurations = {
+       "<configuration name>" = lib.homeManagerConfiguration {
+         modules = [...];
+         extraSpecialArgs = {inherit inputs outputs;};
+         pkgs = pkgsFor.x86_64-linux;
+       };
+     };
+   }
+   ```
+
+2. Import the home manager module and enable the plugin:
+
+   ```nix
+   # tmux.nix
+   {
+     config,
+     lib,
+     pkgs,
+     inputs,
+     ...
+   }: {
+     imports = [inputs.tmux-which-key.homeManagerModules.default];
+   
+     programs = {
+       tmux = {
+         enable = true;
+         tmux-which-key = {
+           enable = true;
+         };
+       };
+   
+       ...
+   
+     };
+   
+     ...
+   }
+   ```
+
+3. Configure the plugin directly through the home manager options using an attribute
+   set mirroring a YAML configuration.
+
+   ```nix
+   # tmux.nix
+   ...
+   
+         tmux-which-key = {
+           enable = true;
+           settings = {
+             command_alias_start_index = 200;
+             ... 
+           };
+         };
+   
+   ...
+   ```
+
+   A YAML file may also be loaded from the file system and converted into an attribute
+   set.
+
+   ```nix
+   # tmux.nix
+   ...
+   
+         tmux-which-key = {
+           enable = true;
+           settings = let
+             fromYaml = file: let
+               convertedJson = pkgs.runCommandNoCC "converted.json" {} ''
+                 ${lib.getExe pkgs.yj} < ${file} > $out
+               '';
+             in
+               builtins.fromJSON (builtins.readFile "${convertedJson}");
+           in
+             fromYaml ./path/to/config.yaml
+         };
+   
+       ...
+   
+     };
+   
+   ...
+   ```
+
+   The default configuration can also be exported as an attribute set to avoid using
+   YAML while using the default configuration as a base.
+
+   ```sh
+   nix run "github:alexwforsythe/tmux-which-key#generate-config" > ./path/to/config.nix
+   ```
+
+   ```nix
+   # tmux.nix
+   ...
+   
+         tmux-which-key = {
+           enable = true;
+           settings = import ./path/to/config.nix;
+         };
+   
+   ...
+   ```
+
+</details>
+
 <!-- markdownlint-enable MD033 -->
 
 ## 🎬️ Quickstart
@@ -188,8 +349,12 @@ tmux source-file $HOME/.tmux.conf
 Once you've installed the plugin and reloaded your tmux config, you can open the
 action using:
 
+<!-- markdownlint-disable MD033 -->
+
 - The default root keybinding <kbd>ctrl</kbd> + <kbd>space</kbd>, or
 - The default prefix keybinding `prefix` + <kbd>space</kbd>
+
+<!-- markdownlint-enable MD033 -->
 
 ## ⚙️ Configuration
 
@@ -292,51 +457,7 @@ set -g @plugin 'alexwforsythe/tmux-which-key'
 ```
 
 This allows the plugin to also be used with immutable or declarative operating
-systems.
-
-<!-- markdownlint-disable MD033 -->
-<details>
-<summary>Example Home Manager Nix Config</summary>
-
-```nix
-{
-  lib,
-  pkgs,
-  ...
-}: let
-  tmux-which-key =
-    pkgs.tmuxPlugins.mkTmuxPlugin
-    {
-      pluginName = "tmux-which-key";
-      version = "2024-01-10";
-      src = pkgs.fetchFromGitHub {
-        owner = "alexwforsythe";
-        repo = "tmux-which-key";
-        rev = "<commit hash>";
-        sha256 = lib.fakeSha256;
-      };
-      rtpFilePath = "plugin.sh.tmux";
-    };
-in {
-  xdg.configFile = {
-    "tmux/plugins/tmux-which-key/config.yaml".text = lib.generators.toYAML {} {
-      command_alias_start_index = 200;
-      # rest of config here
-    };
-  };
-  programs.tmux.plugins = [
-    {
-      plugin = tmux-which-key;
-      extraConfig = ''
-        set -g @tmux-which-key-xdg-enable 1;
-      '';
-    }
-  ];
-}
-```
-
-</details>
-<!-- markdownlint-enable MD033 -->
+systems such as NixOS.
 
 <!-- markdownlint-disable MD024 -->
 
@@ -357,10 +478,14 @@ You can open tmux-which-key from the command line by running its tmux alias:
 tmux show-wk-menu-root
 ```
 
+<!-- markdownlint-disable MD033 -->
+
 You can trigger the menu with <kbd>Space</kbd> from vicmd mode--similarly to
 [Spacemacs](https://github.com/syl20bnr/spacemacs) or
 [VSpaceCode](https://github.com/VSpaceCode/VSpaceCode)--by adding a ZLE widget
 and keybinding to your `~/.zshrc`:
+
+<!-- markdownlint-enable MD033 -->
 
 ```sh
 tmux-which-key() { tmux show-wk-menu-root ; }
