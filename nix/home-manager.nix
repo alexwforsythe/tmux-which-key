@@ -46,22 +46,26 @@ in {
   };
 
   config = let
-    configYaml = lib.generators.toYAML {} cfg.settings;
+    configYaml =
+      pkgs.runCommandNoCC "config.yaml" {
+        nativeBuildInputs = cfg.package.propagatedBuildInputs;
+      } ''
+        echo '# yaml-language-server: $schema=config.schema.yaml' > $out
+        echo '${lib.generators.toYAML {} cfg.settings}' >> $out
+        check-jsonschema -v \
+          --schemafile "${cfg.package}/share/tmux-plugins/tmux-which-key/config.schema.yaml" \
+          $out
+      '';
     configTmux =
       pkgs.runCommandNoCC "init.tmux" {
         nativeBuildInputs = cfg.package.propagatedBuildInputs;
       } ''
-        echo '# yaml-language-server: $schema=config.schema.yaml' > config.yaml
-        echo '${configYaml}' >> config.yaml
-        check-jsonschema -v --schemafile "${cfg.package}/share/tmux-plugins/tmux-which-key/config.schema.yaml" config.yaml
-        python3 "${cfg.package}/share/tmux-plugins/tmux-which-key/plugin/build.py" \
-          config.yaml $out
-        rm config.yaml
+        python3 "${cfg.package}/share/tmux-plugins/tmux-which-key/plugin/build.py" ${configYaml} $out
       '';
   in
     lib.mkIf cfg.enable {
       xdg = {
-        configFile."${pluginPath}/config.yaml".text = configYaml;
+        configFile."${pluginPath}/config.yaml".source = configYaml;
         dataFile."${pluginPath}/init.tmux".source = configTmux;
       };
       programs.tmux.plugins = [
