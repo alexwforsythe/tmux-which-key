@@ -189,12 +189,38 @@ with a wizard to complete the installation.
 
 <!-- markdownlint-enable MD033 -->
 
-### Nix / Home Manager Flake Installation
+### Nix with Home Manager Flake Installation
 
 <!-- markdownlint-disable MD033 -->
 
 <details>
 <summary>Installation steps</summary>
+
+The default tmux options require the plugin directory to be writeable which will
+not work with the Nix store.  XDG user directory support was added in
+alexwforsythe/tmux-which-key#1.  Using this plugin with NixOS without home manager
+is technically possible, but it is not currently supported.
+
+Enabling this plugin with the home manager module currently sets the following options:
+
+```tmux
+# Enables XDG user directory support for the plugin.
+set -g @tmux-which-key-xdg-enable 1;
+
+# Disables building the tmux configuration from YAML everytime the plugin starts.
+# The home manager module calls `plugin/build.py` on each generation.
+set -g @tmux-which-key-disable-autobuild 1
+
+# Follows nixpkgs prefered path for plugins instead of the default
+# path of `${XDG_*_HOME}/tmux/plugins/tmux-which-key`.
+set -g @tmux-which-key-xdg-plugin-path tmux-plugins/tmux-which-key
+```
+
+A symlink of the config file is created in `${XDG_CONFIG_HOME}/tmux-plugins/tmux-which-key/config.yaml`
+for reference.  This is the same file used to generate the actual configuration
+loaded at runtime: `${XDG_DATA_HOME}/tmux-plugins/tmux-which-key/init.tmux`
+
+The following steps go over adding this plugin from the included `flake.nix`:
 
 1. Add this repository as an input and apply its overlay to add the package as
    `tmuxPlugins.tmux-which-key` with the other tmux plugins in `nixpkgs`:
@@ -247,7 +273,8 @@ with a wizard to complete the installation.
    }
    ```
 
-2. Import the home manager module and enable the plugin:
+2. Import the home manager module and enable the plugin to use `config.example.yaml`
+   as the default configuration:
 
    ```nix
    # tmux.nix
@@ -276,8 +303,12 @@ with a wizard to complete the installation.
    }
    ```
 
-3. Configure the plugin directly through the home manager options using an attribute
-   set mirroring a YAML configuration.
+3. For customized settings, configure the plugin directly through the exposed home
+   manager `settings` option with an attribute set mirroring a YAML configuration.
+   The home manager module takes care of building `init.tmux` during each generation.
+   The `settings` option does not strictly enforce the configuration schema, but
+   it is validated using `check-jsonschema` so that any configuration errors will
+   be visible with `nix log`.
 
    ```nix
    # tmux.nix
@@ -295,7 +326,8 @@ with a wizard to complete the installation.
    ```
 
    A YAML file may also be loaded from the file system and converted into an attribute
-   set.
+   set by first converting the YAML into JSON with `yj` and then from JSON to Nix
+   using `builtins.fromJSON`.
 
    ```nix
    # tmux.nix
@@ -321,8 +353,8 @@ with a wizard to complete the installation.
    ...
    ```
 
-   The default configuration can also be exported as an attribute set to avoid using
-   YAML while using the default configuration as a base.
+   The default `config.example.yaml` configuration can also be exported as an
+   attribute set to use as a base.
 
    ```sh
    nix run "github:alexwforsythe/tmux-which-key#generate-config" > ./path/to/config.nix
