@@ -189,7 +189,7 @@ with a wizard to complete the installation.
 
 <!-- markdownlint-enable MD033 -->
 
-### Nix with Home Manager Flake Installation
+### Nix with home manager flake installation
 
 <!-- markdownlint-disable MD033 -->
 
