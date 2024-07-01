@@ -51,7 +51,9 @@ in {
       pkgs.runCommandNoCC "init.tmux" {
         nativeBuildInputs = cfg.package.propagatedBuildInputs;
       } ''
-        echo '${configYaml}' > config.yaml
+        echo '# yaml-language-server: $schema=config.schema.yaml' > config.yaml
+        echo '${configYaml}' >> config.yaml
+        check-jsonschema -v --schemafile "${cfg.package}/share/tmux-plugins/tmux-which-key/config.schema.yaml" config.yaml
         python3 "${cfg.package}/share/tmux-plugins/tmux-which-key/plugin/build.py" \
           config.yaml $out
         rm config.yaml
