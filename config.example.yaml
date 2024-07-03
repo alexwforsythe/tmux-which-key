@@ -84,7 +84,7 @@ items:
           - name: Vertical main
             key: V
             command: selectl main-vertical
-      - name: Split horiztonal
+      - name: Split horizontal
         key: /
         command: "splitw -h -c #{pane_current_path}"
       - name: Split vertical

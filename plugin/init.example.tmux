@@ -48,7 +48,7 @@ Next "n" next-window \
 New "c" "neww -c #{pane_current_path}" \
 "" \
 "+Layout" "l" "show-wk-menu #{@wk_menu_layout}" \
-"Split horiztonal" "/" "splitw -h -c #{pane_current_path}" \
+"Split horizontal" "/" "splitw -h -c #{pane_current_path}" \
 "Split vertical" "-" "splitw -v -c #{pane_current_path}" \
 Rotate "o" "rotatew ; show-wk-menu #{@wk_menu_windows}" \
 "Rotate reverse" "O" "rotatew -D ; show-wk-menu #{@wk_menu_windows}" \
