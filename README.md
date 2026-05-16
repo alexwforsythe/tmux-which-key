@@ -265,7 +265,7 @@ plugin's impact on tmux startup time, you can disable this behavior by adding
 this to your `~/.tmux.conf` **before** loading the plugin:
 
 ```tmux
-set -g @tmux-which-key-disable-autobuild=1
+set -g @tmux-which-key-disable-autobuild 1
 # ...
 set -g @plugin 'alexwforsythe/tmux-which-key'
 ```
@@ -283,8 +283,8 @@ The relative path from `XDG_*_HOME` can be changed using the
 `@tmux-which-key-xdg-plugin-path` option for additional customization.
 
 ```tmux
-set -g @tmux-which-key-xdg-enable=1
-set -g @tmux-which-key-xdg-plugin-path=tmux/plugins/tmux-which-key # default
+set -g @tmux-which-key-xdg-enable 1
+set -g @tmux-which-key-xdg-plugin-path tmux/plugins/tmux-which-key # default
 
 # ...
 
