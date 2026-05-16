@@ -54,7 +54,7 @@ Windows)
         'Rotate' o rotatew \
         'Rotate reverse' O 'rotatew -D' \
         '' \
-        Rename R "command-prompt -I \"#W\" \"renamew -- '%%'\"" \
+        Rename R "command-prompt -p 'Rename window:' -I \"#W\" \"renamew -- '%%'\"" \
         Kill X 'confirm -p "Kill window #W? (y/n)" killw'
     ;;
 Panes)
@@ -116,7 +116,7 @@ Sessions)
     show_menu \
         Choose s 'choose-tree -Zs' \
         New N new \
-        Rename r 'command-prompt -I "rename-session "'
+        Rename r "command-prompt -p 'Rename session:' -I \"#S\" \"rename-session -- '%%'\""
     ;;
 Client)
     show_menu \

@@ -101,7 +101,7 @@ items:
       - separator: true
       - name: Rename
         key: R
-        command: command-prompt -I "#W" "renamew -- \"%%\""
+        command: command-prompt -p "Rename window:" -I "#W" "renamew -- \"%%\""
       - name: Kill
         key: X
         command: 'confirm -p "Kill window #W? (y/n)" killw'
@@ -220,7 +220,7 @@ items:
         command: new
       - name: Rename
         key: r
-        command: command-prompt -p "Rename session:" "rename-session \"%%\""
+        command: command-prompt -p "Rename session:" -I "#S" "rename-session -- \"%%\""
   - name: +Client
     key: C
     menu:

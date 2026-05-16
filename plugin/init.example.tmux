@@ -53,7 +53,7 @@ New "c" "neww -c #{pane_current_path}" \
 Rotate "o" "rotatew ; show-wk-menu #{@wk_menu_windows}" \
 "Rotate reverse" "O" "rotatew -D ; show-wk-menu #{@wk_menu_windows}" \
 "" \
-Rename "R" "command-prompt -I \"#W\" \"renamew -- \\"%%\\"\"" \
+Rename "R" "command-prompt -p \"Rename window:\" -I \"#W\" \"renamew -- \\"%%\\"\"" \
 Kill "X" "confirm -p \"Kill window #W? (y/n)\" killw"'
 
 set -g @wk_menu_resize \
@@ -97,7 +97,7 @@ Paste "p" pasteb'
 set -g @wk_menu_sessions \
 'Choose "s" "choose-tree -Zs" \
 New "N" new \
-Rename "r" 'command-prompt -I "rename-session "'
+Rename "r" "command-prompt -p \"Rename session:\" -I \"#S\" \"rename-session -- \\"%%\\"\""'
 
 set -g @wk_menu_plugins \
 'Install "i" "run-shell $TMUX_PLUGIN_MANAGER_PATH/tpm/bindings/install_plugins" \
