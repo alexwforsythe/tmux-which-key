@@ -12,7 +12,7 @@ position:
   y: P
 custom_variables:
   - name: log_info
-    value: "#[fg=green,italics] [info]#[default]#[italics]"
+    value: '#[fg=green,italics] [info]#[default]#[italics]'
 macros:
   - name: reload-config
     commands:
@@ -22,7 +22,7 @@ macros:
   - name: restart-pane
     commands:
       - display "#{log_info} Restarting pane"
-      - "respawnp -k -c #{pane_current_path}"
+      - 'respawnp -k -c #{pane_current_path}'
 items:
   - name: Run
     key: space
@@ -31,7 +31,7 @@ items:
     key: tab
     command: last-window
   - name: Last pane
-    key: "`"
+    key: '`'
     command: last-pane
   - name: Copy
     key: c
@@ -40,7 +40,7 @@ items:
         key: c
         command: copy-mode
       - name: List buffers
-        key: "#"
+        key: '#'
         command: list-buffers
   - separator: true
   - name: +Windows
@@ -60,7 +60,7 @@ items:
         command: next-window
       - name: New
         key: c
-        command: "neww -c #{pane_current_path}"
+        command: 'neww -c #{pane_current_path}'
       - separator: true
       - name: +Layout
         key: l
@@ -86,10 +86,10 @@ items:
             command: selectl main-vertical
       - name: Split horizontal
         key: /
-        command: "splitw -h -c #{pane_current_path}"
+        command: 'splitw -h -c #{pane_current_path}'
       - name: Split vertical
-        key: "-"
-        command: "splitw -v -c #{pane_current_path}"
+        key: '-'
+        command: 'splitw -v -c #{pane_current_path}'
       - name: Rotate
         key: o
         command: rotatew
@@ -179,7 +179,7 @@ items:
         key: L
         command: swapp -t "{right-of}"
       - name: Break
-        key: "!"
+        key: '!'
         command: break-pane
       - separator: true
       - name: Mark
@@ -245,16 +245,13 @@ items:
         menu:
           - name: Install
             key: i
-            command:
-              run-shell $TMUX_PLUGIN_MANAGER_PATH/tpm/bindings/install_plugins
+            command: run-shell $TMUX_PLUGIN_MANAGER_PATH/tpm/bindings/install_plugins
           - name: Update
             key: u
-            command:
-              run-shell $TMUX_PLUGIN_MANAGER_PATH/tpm/bindings/update_plugins
+            command: run-shell $TMUX_PLUGIN_MANAGER_PATH/tpm/bindings/update_plugins
           - name: Clean
             key: c
-            command:
-              run-shell $TMUX_PLUGIN_MANAGER_PATH/tpm/bindings/clean_plugins
+            command: run-shell $TMUX_PLUGIN_MANAGER_PATH/tpm/bindings/clean_plugins
       - name: Detach
         key: D
         command: detach
@@ -266,15 +263,15 @@ items:
         key: r
         macro: reload-config
       - name: Customize
-        key: ","
+        key: ','
         command: customize-mode -Z
   - separator: true
   - name: Time
     key: T
     command: clock-mode
   - name: Show messages
-    key: "~"
+    key: '~'
     command: show-messages
   - name: +Keys
-    key: "?"
+    key: '?'
     command: list-keys -N
