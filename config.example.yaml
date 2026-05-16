@@ -220,7 +220,7 @@ items:
         command: new
       - name: Rename
         key: r
-        command: rename
+        command: command-prompt -p "Rename session" "rename-session \"%%\""
   - name: +Client
     key: C
     menu:
