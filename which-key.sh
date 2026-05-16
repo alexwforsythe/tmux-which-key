@@ -116,7 +116,7 @@ Sessions)
     show_menu \
         Choose s 'choose-tree -Zs' \
         New N new \
-        Rename r rename
+        Rename r 'command-prompt -I "rename-session "'
     ;;
 Client)
     show_menu \

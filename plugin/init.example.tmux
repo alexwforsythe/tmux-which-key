@@ -97,7 +97,7 @@ Paste "p" pasteb'
 set -g @wk_menu_sessions \
 'Choose "s" "choose-tree -Zs" \
 New "N" new \
-Rename "r" rename'
+Rename "r" 'command-prompt -I "rename-session "'
 
 set -g @wk_menu_plugins \
 'Install "i" "run-shell $TMUX_PLUGIN_MANAGER_PATH/tpm/bindings/install_plugins" \
