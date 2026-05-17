@@ -131,9 +131,11 @@ esac
 # updates.
 if [ ! -f "$config_file" ]; then
     cp "$root_dir/config.example.yaml" "$config_file"
+    echo "[tmux-which-key] Created YAML config file at: $config_file"
 fi
 if [ ! -f "$init_file" ]; then
     cp "$plugin_dir/init.example.tmux" "$init_file"
+    echo "[tmux-which-key] Created tmux menu file at: $init_file"
 fi
 
 # If enabled, rebuild the menu from the user config.
