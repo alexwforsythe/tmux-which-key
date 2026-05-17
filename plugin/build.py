@@ -2,12 +2,18 @@
 
 import argparse
 import logging
-import sys
 from dataclasses import dataclass
-from pathlib import Path
 from typing import List, Optional
+import sys
+from pathlib import Path
+import sys
+from pathlib import Path
 
-from pyyaml.lib import yaml
+# Add the plugin directory to sys.path so we can import the vendored pyyaml.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+# Use a conditional to trick isort into leaving this import at the bottom.
+if True:
+    from pyyaml.lib import yaml
 
 special_key_chars: List[str] = ['~']
 
@@ -332,7 +338,7 @@ def main() -> int:
     config = Config(**data)
     out = str(config)
 
-    with open(args.output_file, 'w+') as output_file:
+    with open(args.output_file, 'w+', encoding='utf-8') as output_file:
         output_file.write(out)
 
     logging.info('Done')
