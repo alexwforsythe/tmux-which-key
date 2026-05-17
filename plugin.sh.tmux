@@ -138,15 +138,19 @@ fi
 
 # If enabled, rebuild the menu from the user config.
 case "$(tmux show-option -gvq @tmux-which-key-disable-autobuild)" in
-    1 | true) ;;
-    *)
-        echo "[tmux-which-key] Rebuilding menu ..."
-        if command -v python3 >/dev/null; then
-            "$plugin_dir/build.py" "$config_file" "$init_file"
-        else
-            echo "[tmux-which-key] python3 not found"
-        fi
-        ;;
+1 | true) ;;
+*)
+    echo "[tmux-which-key] Rebuilding menu ..."
+    if command -v python3 >/dev/null 2>&1; then
+        python3 -c "import sys; sys.exit(0 if sys.version_info >= (3, 8) else 1)" || {
+            echo "[tmux-which-key] Python 3.8+ required" >&2
+            exit 1
+        }
+        "$plugin_dir/build.py" "$config_file" "$init_file"
+    else
+        echo "[tmux-which-key] Skipping rebuild: python3 not found in PATH"
+    fi
+    ;;
 esac
 
 # Load the plugin.
