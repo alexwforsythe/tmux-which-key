@@ -13,11 +13,13 @@ position:
 custom_variables:
   - name: log_info
     value: '#[fg=green,italics] [info]#[default]#[italics]'
+  - name: config_file_path
+    value: '#{?#{XDG_CONFIG_HOME:-$HOME}}/.tmux.conf'
 macros:
   - name: reload-config
     commands:
       - display "#{log_info} Loading config... "
-      - source-file $HOME/.tmux.conf
+      - source-file "#{config_file_path}"
       - display -p "\n\n... Press ENTER to continue"
   - name: restart-pane
     commands:

@@ -23,6 +23,7 @@ set -g @wk_cfg_pos_y "P"
 #
 
 setenv -h log_info "#[fg=green,italics] [info]#[default]#[italics]"
+setenv -h config_file_path "#{?#{XDG_CONFIG_HOME:-$HOME}}/.tmux.conf"
 
 #
 # Menus
@@ -152,7 +153,7 @@ set -gF command-alias[201] show-wk-menu-root=\
 
 set -gF command-alias[202] reload-config=\
 'display "#{log_info} Loading config... " ; \
-source-file $HOME/.tmux.conf ; \
+source-file "#{config_file_path}" ; \
 display -p "\n\n... Press ENTER to continue"'
 
 set -gF command-alias[203] restart-pane=\
