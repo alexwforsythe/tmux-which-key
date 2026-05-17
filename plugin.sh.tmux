@@ -36,46 +36,46 @@ make_xdg_path() {
 }
 
 case "$(tmux show-option -gvq @tmux-which-key-xdg-enable)" in
-    1 | true)
-        if [ -z "$HOME" ]; then
-            echo "[tmux-which-key] HOME is not set.  XDG support is limited to users only."
-            exit 1
-        fi
+1 | true)
+    if [ -z "$HOME" ]; then
+        echo "[tmux-which-key] HOME is not set.  XDG support is limited to users only."
+        exit 1
+    fi
 
-        # use XDG spec's default directories if not set
-        XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
-        XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
+    # use XDG spec's default directories if not set
+    XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
+    XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
 
-        # get relative XDG path for the plugin or use the default
-        xdg_plugin_path=$(tmux show-option -gvq @tmux-which-key-xdg-plugin-path)
-        xdg_plugin_path=${xdg_plugin_path:-tmux/plugins/tmux-which-key}
+    # get relative XDG path for the plugin or use the default
+    xdg_plugin_path=$(tmux show-option -gvq @tmux-which-key-xdg-plugin-path)
+    xdg_plugin_path=${xdg_plugin_path:-tmux/plugins/tmux-which-key}
 
-        # create the config path if it doesn't exist, ensure it is inside
-        # $HOME, and simplify the path
-        xdg_config_path="$(realpath --relative-to="$HOME" "$XDG_CONFIG_HOME")/$xdg_plugin_path"
-        case "$xdg_config_path" in
-            ../*)
-                echo "[tmux-which-key] XDG_CONFIG_HOME plugin path is outside of HOME: $HOME/$xdg_config_path"
-                exit 1
-                ;;
-        esac
-        make_xdg_path "$HOME/$xdg_config_path"
-
-        # create the data path if it doesn't exist, ensure it is inside
-        # $HOME, and simplify the path
-        xdg_data_path="$(realpath --relative-to="$HOME" "$XDG_DATA_HOME")/$xdg_plugin_path"
-        case "$xdg_data_path" in
-            ../*)
-                echo "[tmux-which-key] XDG_DATA_HOME plugin path is outside of HOME: $HOME/$xdg_data_path"
-                exit 1
-                ;;
-        esac
-        make_xdg_path "$HOME/$xdg_data_path"
-
-        # use the XDG paths
-        config_file="$HOME/$xdg_config_path/config.yaml"
-        init_file="$HOME/$xdg_data_path/init.tmux"
+    # create the config path if it doesn't exist, ensure it is inside
+    # $HOME, and simplify the path
+    xdg_config_path="$(realpath --relative-to="$HOME" "$XDG_CONFIG_HOME")/$xdg_plugin_path"
+    case "$xdg_config_path" in
+    ../*)
+        echo "[tmux-which-key] XDG_CONFIG_HOME plugin path is outside of HOME: $HOME/$xdg_config_path"
+        exit 1
         ;;
+    esac
+    make_xdg_path "$HOME/$xdg_config_path"
+
+    # create the data path if it doesn't exist, ensure it is inside
+    # $HOME, and simplify the path
+    xdg_data_path="$(realpath --relative-to="$HOME" "$XDG_DATA_HOME")/$xdg_plugin_path"
+    case "$xdg_data_path" in
+    ../*)
+        echo "[tmux-which-key] XDG_DATA_HOME plugin path is outside of HOME: $HOME/$xdg_data_path"
+        exit 1
+        ;;
+    esac
+    make_xdg_path "$HOME/$xdg_data_path"
+
+    # use the XDG paths
+    config_file="$HOME/$xdg_config_path/config.yaml"
+    init_file="$HOME/$xdg_data_path/init.tmux"
+    ;;
 esac
 
 # /XDG
