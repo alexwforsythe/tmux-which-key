@@ -9,7 +9,7 @@ set -e
 # this file has the "tmux" extension despite being a shell script.
 #
 
-root_dir="$(dirname "$(readlink -f "$0")")"
+root_dir="$(cd "$(dirname "$0")" && pwd -P)"
 config_file="$root_dir/config.yaml"
 plugin_dir="$root_dir/plugin"
 init_file="$plugin_dir/init.tmux"
