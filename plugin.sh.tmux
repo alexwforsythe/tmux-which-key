@@ -16,23 +16,25 @@ init_file="$plugin_dir/init.tmux"
 
 # XDG
 
-# create an XDG path and set the spec's default permissions of 0700 to newly
-# created directories only
+# Create an XDG path and set the spec's default permissions of 0700 to newly
+# created directories only.
 make_xdg_path() {
-    OLDIFS=$IFS
-    IFS='/'
+    old_ifs=$IFS
+    IFS=/
     current_dir=""
-    # walk the path to create each directory if it doesn't exist
-    for dir in $1; do
-        current_dir="$current_dir/$dir"
-        # only create the directory and apply the mode it doesn't exist
-        if [ ! -d "$current_dir/$dir" ]; then
-            # shellcheck disable=SC2174
-            # applying the mode to the deepest directory is intentional
-            mkdir -m 0700 -p "$current_dir"
+    # Walk the path and create each directory that doesn't exist.
+    for seg in $1; do
+        # Skip the empty string produced by the leading slash.
+        [ -z "$seg" ] && continue
+
+        # Only create the directory and apply the mode if it doesn't exist.
+        current_dir="$current_dir/$seg"
+        if [ ! -d "$current_dir" ]; then
+            mkdir -p "$current_dir"
+            chmod 0700 "$current_dir"
         fi
     done
-    IFS=$OLDIFS
+    IFS=$old_ifs
 }
 
 case "$(tmux show-option -gvq @tmux-which-key-xdg-enable)" in
