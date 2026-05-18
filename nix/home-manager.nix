@@ -66,7 +66,7 @@ in {
     lib.mkIf cfg.enable {
       xdg = {
         configFile."${pluginPath}/config.yaml".source = configYaml;
-        dataFile."${pluginPath}/init.tmux".source = configTmux;
+        dataFile."${pluginPath}/build/init.tmux".source = configTmux;
       };
       programs.tmux.plugins = [
         {

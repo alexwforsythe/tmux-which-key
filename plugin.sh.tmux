@@ -15,8 +15,8 @@ DEFAULT_XDG_PLUGIN_REL_PATH="tmux/plugins/tmux-which-key"
 
 root_dir="$(cd "$(dirname "$0")" && pwd -P)"
 config_file="$root_dir/config.yaml"
-plugin_dir="$root_dir/plugin"
-init_file="$plugin_dir/init.tmux"
+init_file="$root_dir/build/init.tmux"
+old_output_dir="$root_dir/plugin/init.tmux"
 
 # XDG
 
@@ -115,7 +115,11 @@ case "$(tmux show-option -gvq @tmux-which-key-xdg-enable)" in
     # Ensure the XDG plugin paths exist.
     xdg_config_plugin_dir="$xdg_config_dir/$xdg_plugin_rel_path"
     make_xdg_path "$xdg_config_plugin_dir"
-    xdg_data_plugin_dir="$xdg_data_dir/$xdg_plugin_rel_path"
+    # This plugin might be installed at $xdg_data_dir/$xdg_plugin_rel_path, so
+    # put the init file in a subdir so TPM won't try to load it. TPM will load
+    # the plugin via this script, which already sources the init file after
+    # rebuilding it. Use "build" as the subdir so it will be gitignored.
+    xdg_data_plugin_dir="$xdg_data_dir/$xdg_plugin_rel_path/build"
     make_xdg_path "$xdg_data_plugin_dir"
 
     # Use the XDG plugin paths.
@@ -126,15 +130,20 @@ esac
 
 # /XDG
 
-# Copy the default configs to the root directory if they don't exist yet. The
-# root files are gitignored so users can customize them without breaking git
-# updates.
+# Migrate the init file if it exists at the old path.
+if [ -f "$old_output_dir/init.tmux" ]; then
+    mv "$old_output_dir/init.tmux" "$init_file"
+fi
+
+# Copy the default config and init files to their target paths if they don't
+# exist yet. The targets are gitignored so users can customize them without
+# breaking git updates.
 if [ ! -f "$config_file" ]; then
     cp "$root_dir/config.example.yaml" "$config_file"
     echo "[tmux-which-key] Created YAML config file at: $config_file"
 fi
 if [ ! -f "$init_file" ]; then
-    cp "$plugin_dir/init.example.tmux" "$init_file"
+    cp "$root_dir/build/init.example.tmux" "$init_file"
     echo "[tmux-which-key] Created tmux menu file at: $init_file"
 fi
 
@@ -148,7 +157,7 @@ case "$(tmux show-option -gvq @tmux-which-key-disable-autobuild)" in
             echo "[tmux-which-key] Python 3.8+ required" >&2
             exit 1
         }
-        "$plugin_dir/build.py" "$config_file" "$init_file"
+        "$root_dir/plugin/build.py" "$config_file" "$init_file"
     else
         echo "[tmux-which-key] Skipping rebuild: python3 not found in PATH" >&2
     fi

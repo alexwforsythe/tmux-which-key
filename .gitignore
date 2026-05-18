@@ -3,5 +3,7 @@
 # Ignore the plugin files so users can customize them.
 # The default config is stored at /config.example.yaml.
 /config.yaml
-# The default output config is stored at /plugin/init.example.tmux.
+# The default output config is stored at /build/init.example.tmux.
+/build/init.tmux
+# old path
 /plugin/init.tmux
