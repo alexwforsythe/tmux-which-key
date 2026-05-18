@@ -81,7 +81,7 @@ make_xdg_path() {
 case "$(tmux show-option -gvq @tmux-which-key-xdg-enable)" in
 1 | true)
     if [ -z "$HOME" ]; then
-        echo "[tmux-which-key] HOME is not set. XDG support is limited to users only."
+        echo "[tmux-which-key] HOME is not set. XDG support is limited to users only." >&2
         exit 1
     fi
 
@@ -99,7 +99,7 @@ case "$(tmux show-option -gvq @tmux-which-key-xdg-enable)" in
     "$home_dir"/*) ;;
     "$home_dir") ;;
     *)
-        echo "[tmux-which-key] XDG_CONFIG_HOME is outside HOME: $xdg_config_plugin_dir"
+        echo "[tmux-which-key] XDG_CONFIG_HOME is outside HOME: $xdg_config_dir" >&2
         exit 1
         ;;
     esac
@@ -107,7 +107,7 @@ case "$(tmux show-option -gvq @tmux-which-key-xdg-enable)" in
     "$home_dir"/*) ;;
     "$home_dir") ;;
     *)
-        echo "[tmux-which-key] XDG_DATA_HOME is outside HOME: $xdg_data_plugin_dir"
+        echo "[tmux-which-key] XDG_DATA_HOME is outside HOME: $xdg_data_dir" >&2
         exit 1
         ;;
     esac
@@ -150,7 +150,7 @@ case "$(tmux show-option -gvq @tmux-which-key-disable-autobuild)" in
         }
         "$plugin_dir/build.py" "$config_file" "$init_file"
     else
-        echo "[tmux-which-key] Skipping rebuild: python3 not found in PATH"
+        echo "[tmux-which-key] Skipping rebuild: python3 not found in PATH" >&2
     fi
     ;;
 esac
